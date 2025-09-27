@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="robot" params="prefix sim_mode:=false">
+
+  <xacro:include filename="inertia.xacro"/>
+
+  <material name="blue">
+    <color rgba="0 0 1.0 1.0"/>
+  </material>
+  <material name="green">
+    <color rgba="0 1.0 0 1.0"/>
+  </material>
+  <material name="red">
+    <color rgba="1.0 0 0 1.0"/>
+  </material>
+  
+  <!-- This macro will make life easier. Source: trust me bro -->
+  <xacro:macro name="wheel_macro" params="parent prefix xyz rpy axis">
+    <joint name="${prefix}_joint" type="continuous">
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+      <parent link="${parent}"/>
+      <child  link="${prefix}_link"/>
+      <axis xyz="${axis}"/>
+    </joint>
+    <link name="${prefix}_link">
+      <visual>
+        <geometry>
+          <cylinder length="0.03643720" radius="0.035369"/>
+        </geometry>
+        <material name="red"/>
+      </visual>
+      <collision>
+        <geometry>
+          <sphere radius="0.035369"/>
+        </geometry>
+      </collision>
+      <!-- Please change mass... -->
+      <xacro:inertial_cylinder mass="1" length="0.03643720" radius="0.035369">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+      </xacro:inertial_cylinder>
+    </link>
+  </xacro:macro> 
+
+  <link name="base_link"/>
+
+  <joint name="chassis_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="chassis"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <link name="chassis">
+    <inertial>
+      <origin xyz="3.84321e-10 9.33138e-10 0.0163291" rpy="0 0 -${pi/2}"/>
+      <!-- Please change mass and inertia matrix to reflect better aprox -->
+      <mass value="16.479"/>
+      <inertia ixx="0.174135" ixy="1.42629e-09" ixz="-7.38887e-11" iyy="0.119734" iyz="-1.54691e-10" izz="0.279608"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 -0 -${pi/2}"/>
+      <geometry>
+        <mesh filename="package://rivals/description/assets/part_1__6ed075fc00e4d09673dc30a20c0a2d67.stl"/>
+      </geometry>
+      <material name="part_1__6ed075fc00e4d09673dc30a20c0a2d67_material">
+        <color rgba="0.615686 0.811765 0.929412 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 -0 -${pi/2}"/>
+      <geometry>
+        <mesh filename="package://rivals/description/assets/part_1__6ed075fc00e4d09673dc30a20c0a2d67.stl"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <xacro:wheel_macro prefix="FL_wheel" parent="chassis" xyz="0.11829359 0.11703082 0" rpy="-${pi/2} 0 0" axis="0 0 1"/>
+  <xacro:wheel_macro prefix="BL_wheel" parent="chassis" xyz="-0.11829359 0.11703082 0" rpy="-${pi/2} 0 0" axis="0 0 1"/>
+  <xacro:wheel_macro prefix="FR_wheel" parent="chassis" xyz="0.11829359 -0.11703082 0" rpy="${pi/2} 0 0" axis="0 0 -1"/>
+  <xacro:wheel_macro prefix="BR_wheel" parent="chassis" xyz="-0.11829359 -0.11703082 0" rpy="${pi/2} 0 0" axis="0 0 -1"/>
+  
+  <!-- <joint name="camera_joint" type="fixed"> -->
+  <!--   <parent link="base_link"/> -->
+  <!--   <child  link="camera_link"/> -->
+  <!--   <origin xyz="0.05 -0.1 0.1" rpy="0 0 0"/> -->
+  <!-- </joint> -->
+  <!-- <link name="camera_link"> -->
+  <!-- </link> -->
+  <!---->
+  <!-- <joint name="depth_camera_joint" type="fixed"> -->
+  <!--   <parent link="base_link"/> -->
+  <!--   <child  link="depth_camera_link"/> -->
+  <!--   <origin xyz="0.05 0.1 0.1" rpy="0 0 0"/> -->
+  <!-- </joint> -->
+  <!-- <link name="depth_camera_link"> -->
+  <!-- </link> -->
+  </xacro:macro>
+</robot>
+

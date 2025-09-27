@@ -1,0 +1,74 @@
+import os
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch.actions import RegisterEventHandler, TimerAction, IncludeLaunchDescription
+from launch.event_handlers import OnProcessStart
+from launch.substitutions import Command
+from launch_ros.actions import Node
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+
+def generate_launch_description():
+    package_name = 'rivals'
+
+    pkg_path = get_package_share_directory(package_name)
+    xacro_file = os.path.join(pkg_path, 'description', 'robot.urdf.xacro')
+    robot_description = {'robot_description': Command(['xacro ', xacro_file, ' use_ros2_control:=true', ' sim_mode:=true'])}
+
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        output='screen',
+        parameters=[robot_description]
+    )
+
+    gamepad = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    get_package_share_directory(package_name), 'launch', 'gamepad.launch.py'
+                )]), launch_arguments={'use_sim_time': 'true'}.items()
+    )
+
+    # This is temp in case we want to use other Nodes like Nav2 to control the bot
+    twist_mux_params = os.path.join(get_package_share_directory(package_name), 'config', 'twist_mux.yaml')
+    twist_mux = Node(
+            package="twist_mux",
+            executable="twist_mux",
+            parameters=[twist_mux_params, {'use_sim_time': True}],
+            remappings=[('/cmd_vel_out', '/diff_cont/cmd_vel_unstamped')]
+        )
+
+    controller_params = os.path.join(pkg_path, 'config', 'control.yaml')
+    controller_manager_node = Node(
+        package='controller_manager',
+        executable='ros2_control_node',
+        parameters=[robot_description, controller_params],
+        output={
+            "stdout": "screen",
+            "stderr": "screen",
+        },
+    )
+
+    diff_drive_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_cont", "--controller-manager", "/controller_manager"]
+    )
+    joint_broad_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_broad", "--controller-manager", "/controller_manager"]
+    )
+
+    delayed_spawners = RegisterEventHandler(
+        event_handler=OnProcessStart(
+            target_action=controller_manager_node,
+            on_start=[diff_drive_spawner, joint_broad_spawner],
+        )
+    )
+
+    return LaunchDescription([
+        robot_state_publisher_node,
+        gamepad,
+        # twist_mux,
+        controller_manager_node,
+        delayed_spawners
+    ])

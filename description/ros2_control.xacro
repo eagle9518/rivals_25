@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="robot_control" params="name prefix sim_mode:=false">
+
+    <xacro:if value="${sim_mode}">
+      <!-- Want Isaac to consume the joint speeds not /cmd_vel -->
+      <ros2_control name="${name}" type="system">
+        <hardware>
+          <plugin>topic_based_ros2_control/TopicBasedSystem</plugin>
+          <param name="joint_commands_topic">/${name}/joint_command</param>
+          <param name="joint_states_topic">/${name}/joint_states</param>
+          <param name="sum_wrapped_joint_states">true</param>
+        </hardware>
+        <joint name="FL_wheel_joint">
+          <command_interface name="velocity">
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="FR_wheel_joint">
+          <command_interface name="velocity">
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="BL_wheel_joint">
+          <command_interface name="velocity">
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="BR_wheel_joint">
+          <command_interface name="velocity">
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+      </ros2_control>
+    </xacro:if>
+    <xacro:unless value="${sim_mode}">
+      <ros2_control name="Real" type="system">
+        <hardware>
+          <!-- Insert custom NEO plugin -->
+          <plugin></plugin>
+        </hardware>
+        <joint name="FL_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="BL_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="FR_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+        <joint name="BR_wheel_joint">
+          <command_interface name="velocity">
+            <param name="min">-10</param>
+            <param name="max">10</param>
+          </command_interface>
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+        </joint>
+      </ros2_control>
+    </xacro:unless>
+  </xacro:macro>
+</robot>

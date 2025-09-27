@@ -1,0 +1,34 @@
+# ROS
+build/
+devel/
+install/
+log/
+.catkin_tools/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_CPack_Packages/
+
+# Python
+*.pyc
+__pycache__/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Misc
+*.log
+*.bak
+*.orig
+*.rej
+*.DS_Store
+Thumbs.db

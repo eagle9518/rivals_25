@@ -1,0 +1,13 @@
+{
+    "configuration": "Bumper_Offset=0.006350000000000001+meter;left=0.025400000000000002+meter",
+    "documentId": "a64fe3bedff8d4be424139db",
+    "documentMicroversion": "ead62db40959bfc863d2cfcb",
+    "elementId": "fce113ee28be582a33d5a4df",
+    "fullConfiguration": "Bumper_Offset=0.006350000000000001+meter;left=0.025400000000000002+meter",
+    "id": "M4SK0DAQQSrRZKXkW",
+    "isStandardContent": false,
+    "name": "outterHUB <3>",
+    "partId": "RZFL",
+    "suppressed": false,
+    "type": "Part"
+}
