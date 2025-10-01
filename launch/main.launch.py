@@ -12,7 +12,7 @@ def generate_launch_description():
 
     pkg_path = get_package_share_directory(package_name)
     xacro_file = os.path.join(pkg_path, 'description', 'robot.urdf.xacro')
-    robot_description = {'robot_description': Command(['xacro ', xacro_file, ' use_ros2_control:=true', ' sim_mode:=true'])}
+    robot_description = {'robot_description': Command(['xacro ', xacro_file, ' use_ros2_control:=true', ' sim_mode:=false'])}
 
     robot_state_publisher_node = Node(
         package='robot_state_publisher',
@@ -24,7 +24,7 @@ def generate_launch_description():
     gamepad = IncludeLaunchDescription(
                 PythonLaunchDescriptionSource([os.path.join(
                     get_package_share_directory(package_name), 'launch', 'gamepad.launch.py'
-                )]), launch_arguments={'use_sim_time': 'true'}.items()
+                )]), launch_arguments={'use_sim_time': 'false'}.items()
     )
 
     # This is temp in case we want to use other Nodes like Nav2 to control the bot
@@ -32,7 +32,7 @@ def generate_launch_description():
     twist_mux = Node(
             package="twist_mux",
             executable="twist_mux",
-            parameters=[twist_mux_params, {'use_sim_time': True}],
+            parameters=[twist_mux_params, {'use_sim_time': False}],
             remappings=[('/cmd_vel_out', '/diff_cont/cmd_vel_unstamped')]
         )
 
