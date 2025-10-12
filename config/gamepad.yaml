@@ -9,9 +9,9 @@ teleop_node:
     axis_linear:
       x: 1
     scale_linear:
-      x: 1.0
+      x: 10.0
 
     axis_angular:
       yaw: 0
     scale_angular:
-      yaw: 1.0
+      yaw: 5.0
