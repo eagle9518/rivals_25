@@ -46,6 +46,16 @@ def generate_launch_description():
         },
     )
 
+    shooter_servo_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["position_controller", "--controller-manager", "/controller_manager"]
+    )
+    shooter_wheel_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["velocity_controller", "--controller-manager", "/controller_manager"]
+    )
     diff_drive_spawner = Node(
         package="controller_manager",
         executable="spawner",
@@ -60,7 +70,9 @@ def generate_launch_description():
     delayed_spawners = RegisterEventHandler(
         event_handler=OnProcessStart(
             target_action=controller_manager_node,
-            on_start=[diff_drive_spawner, joint_broad_spawner],
+            on_start=[shooter_servo_spawner, shooter_wheel_spawner, 
+                      diff_drive_spawner, joint_broad_spawner
+            ]
         )
     )
 
