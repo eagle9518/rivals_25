@@ -67,7 +67,7 @@ def generate_launch_description():
     return LaunchDescription([
         robot_state_publisher_node,
         camera_one,
-        # twist_mux,
+        twist_mux,
         controller_manager_node,
         delayed_spawners
     ])
