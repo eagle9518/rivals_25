@@ -21,20 +21,19 @@ def generate_launch_description():
         parameters=[robot_description]
     )
 
-    gamepad = IncludeLaunchDescription(
-                PythonLaunchDescriptionSource([os.path.join(
-                    get_package_share_directory(package_name), 'launch', 'gamepad.launch.py'
-                )]), launch_arguments={'use_sim_time': 'false'}.items()
+    camera_one = IncludeLaunchDescription(
+                    PythonLaunchDescriptionSource([os.path.join(
+                        get_package_share_directory(package_name), 'launch', 'camera.launch.py'
+                    )])
     )
 
-    # This is temp in case we want to use other Nodes like Nav2 to control the bot
     twist_mux_params = os.path.join(get_package_share_directory(package_name), 'config', 'twist_mux.yaml')
     twist_mux = Node(
             package="twist_mux",
             executable="twist_mux",
             parameters=[twist_mux_params, {'use_sim_time': False}],
             remappings=[('/cmd_vel_out', '/diff_cont/cmd_vel_unstamped')]
-        )
+    )
 
     controller_params = os.path.join(pkg_path, 'config', 'control.yaml')
     controller_manager_node = Node(
@@ -67,7 +66,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         robot_state_publisher_node,
-        gamepad,
+        camera_one,
         # twist_mux,
         controller_manager_node,
         delayed_spawners
