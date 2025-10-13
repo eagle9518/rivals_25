@@ -3,9 +3,10 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import RegisterEventHandler, TimerAction, IncludeLaunchDescription
 from launch.event_handlers import OnProcessStart
-from launch.substitutions import Command
+from launch.substitutions import Command, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch_ros.substitutions import FindPackageShare
 
 def generate_launch_description():
     package_name = 'rivals'
@@ -22,9 +23,25 @@ def generate_launch_description():
     )
 
     camera_one = IncludeLaunchDescription(
-                    PythonLaunchDescriptionSource([os.path.join(
-                        get_package_share_directory(package_name), 'launch', 'camera.launch.py'
-                    )])
+                     PathJoinSubstitution([
+                         FindPackageShare(package_name),
+                         'launch',
+                         'camera.launch.py'
+                     ]),
+                     launch_arguments={
+                         'pkg_path': pkg_path
+                     }.items()
+    )
+
+    publish_poses = IncludeLaunchDescription(
+                        PathJoinSubstitution([
+                            FindPackageShare(package_name),
+                            'launch',
+                            'poses.launch.py'
+                        ]),
+                        launch_arguments={
+                            'pkg_path': pkg_path
+                        }.items()
     )
 
     twist_mux_params = os.path.join(get_package_share_directory(package_name), 'config', 'twist_mux.yaml')

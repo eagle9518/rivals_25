@@ -4,9 +4,16 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
+from launch.substitutions import LaunchConfiguration
+from launch.actions import DeclareLaunchArgument
 
 def generate_launch_description():
-    april_settings = os.path.join(get_package_share_directory('rivals'), 'config', 'april_settings.yaml')
+    pkg_path = LaunchConfiguration('pkg_path')
+    pkg_path = DeclareLaunchArgument(
+                    'pkg_path',
+                    default_value="rivals"
+               )
+    april_settings = os.path.join(pkg_path, 'config', 'april_settings.yaml')
     container = ComposableNodeContainer(
         package="rclcpp_components",
         executable="component_container_mt",
