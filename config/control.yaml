@@ -8,11 +8,21 @@ controller_manager:
     joint_broad:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    position_controller:
+    shooter_position_controller:
       type: position_controllers/JointGroupPositionController
 
-    velocity_controller:
+    shooter_velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
+
+    intake_position_controller:
+      type: position_controllers/JointGroupPositionController
+
+    intake_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
+
+    stick_position_controller:
+      type: position_controllers/JointGroupPositionController
+
 
 diff_cont:
   ros__parameters:
@@ -27,12 +37,25 @@ diff_cont:
     wheel_radius: 0.033
 
     use_stamped_vel: false
+    # TODO I think there's a param that can be set such that it doesn't expect
+    #      encoder values back
 
-position_controller:
+shooter_position_controller:
   ros__parameters:
     joints: ['yaw_shooter_servo_joint', 'pitch_shooter_servo_joint']
 
-velocity_controller:
+shooter_velocity_controller:
   ros__parameters:
     joints: ['left_shooter_wheel_joint', 'right_shooter_wheel_joint']
 
+intake_position_controller:
+  ros__parameters:
+    joints: ['yaw_shooter_servo_joint', 'pitch_shooter_servo_joint']
+
+intake_velocity_controller:
+  ros__parameters:
+    joints: ['left_shooter_wheel_joint', 'right_shooter_wheel_joint']
+
+stick_position_controller:
+  ros__parameters:
+    joints: ['yaw_shooter_servo_joint', 'pitch_shooter_servo_joint']
