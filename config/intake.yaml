@@ -1,0 +1,8 @@
+intake:
+  ros__parameters:
+    intake_active: 1.0
+    intake_idle: 0.0
+    servo_open: 1.0
+    servo_closed: 0.0
+    button_index: 5
+

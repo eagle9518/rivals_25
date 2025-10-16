@@ -2,17 +2,15 @@ import os
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch_ros.actions import Node, ComposableNodeContainer
+from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
-from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument
+
 
 def generate_launch_description():
-    pkg_path = LaunchConfiguration('pkg_path')
-    pkg_path = DeclareLaunchArgument(
-                    'pkg_path',
-                    default_value="rivals"
-               )
+    # TODO: Figure out a way to pass this pkg_path as a Launch Argument (99% sure it's possible)
+    package_name = 'rivals'
+    pkg_path = get_package_share_directory(package_name)
+
     april_settings = os.path.join(pkg_path, 'config', 'april_settings.yaml')
     container = ComposableNodeContainer(
         package="rclcpp_components",
@@ -29,7 +27,7 @@ def generate_launch_description():
                     "video_device": "/dev/video0",
                     "image_size": [640, 480],
                     "use_intra_process_comms": True,
-                    "time_per_frame": [1, 30] #30 fps
+                    "time_per_frame": [1, 30] # 30 fps
                 }],
             ),
             ComposableNode(

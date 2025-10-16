@@ -28,9 +28,6 @@ def generate_launch_description():
                          'launch',
                          'camera.launch.py'
                      ]),
-                     launch_arguments={
-                         'pkg_path': pkg_path
-                     }.items()
     )
 
     publish_poses = IncludeLaunchDescription(
@@ -39,9 +36,6 @@ def generate_launch_description():
                             'launch',
                             'poses.launch.py'
                         ]),
-                        launch_arguments={
-                            'pkg_path': pkg_path
-                        }.items()
     )
 
     twist_mux_params = os.path.join(get_package_share_directory(package_name), 'config', 'twist_mux.yaml')
@@ -63,15 +57,31 @@ def generate_launch_description():
         },
     )
 
+    # TODO: Yeah probably should make a separate laucnh file for this
     shooter_servo_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["position_controller", "--controller-manager", "/controller_manager"]
+        arguments=["shooter_position_controller", "--controller-manager", "/controller_manager"]
     )
     shooter_wheel_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["velocity_controller", "--controller-manager", "/controller_manager"]
+        arguments=["shooter_velocity_controller", "--controller-manager", "/controller_manager"]
+    )
+    intake_servo_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["intake_position_controller", "--controller-manager", "/controller_manager"]
+    )
+    intake_wheel_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["intake_velocity_controller", "--controller-manager", "/controller_manager"]
+    )
+    stick_servo_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["stick_position_controller", "--controller-manager", "/controller_manager"]
     )
     diff_drive_spawner = Node(
         package="controller_manager",
@@ -88,6 +98,8 @@ def generate_launch_description():
         event_handler=OnProcessStart(
             target_action=controller_manager_node,
             on_start=[shooter_servo_spawner, shooter_wheel_spawner, 
+                      intake_servo_spawner, intake_wheel_spawner, 
+                      stick_servo_spawner,
                       diff_drive_spawner, joint_broad_spawner
             ]
         )
@@ -96,6 +108,7 @@ def generate_launch_description():
     return LaunchDescription([
         robot_state_publisher_node,
         camera_one,
+        publish_poses,
         twist_mux,
         controller_manager_node,
         delayed_spawners

@@ -3,15 +3,12 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument
+
 
 def generate_launch_description():
-    pkg_path = LaunchConfiguration('pkg_path')
-    pkg_path = DeclareLaunchArgument(
-                    'pkg_path',
-                    default_value='rivals'
-    )
+    package_name = 'rivals'
+    pkg_path = get_package_share_directory(package_name)
+
     tag_pose = os.path.join(pkg_path, 'config', 'tag_pose.yaml')
     target_pose = os.path.join(pkg_path, 'config', 'target_pose.yaml')
 
@@ -29,11 +26,11 @@ def generate_launch_description():
         nodes.append(
             Node(
                 package='tf2_ros',
-                executable='static_transformpublisher',
+                executable='static_transform_publisher',
                 name=f'tag{tag}_tfpub',
                 arguments=[
                     str(x), str(y), str(z),
-                    str(roll), str(pitch), str(yaw),
+                    str(yaw), str(pitch), str(roll),
                     'world', f'tag{tag}'
                 ],
                 output='screen'
@@ -47,7 +44,7 @@ def generate_launch_description():
         nodes.append(
             Node(
                 package='tf2_ros',
-                executable='static_transformpublisher',
+                executable='static_transform_publisher',
                 name=f'{target}_tfpub',
                 arguments=[
                     str(x), str(y), str(z),
@@ -57,4 +54,5 @@ def generate_launch_description():
                 output='screen'
             )
         )
+
     return LaunchDescription(nodes)
