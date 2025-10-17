@@ -24,7 +24,7 @@ if(BUILD_TESTING)
 endif()
 
 install(
-  DIRECTORY config description launch world
+  DIRECTORY config description launch msgs scripts 
   DESTINATION share/${PROJECT_NAME}
 )
 
