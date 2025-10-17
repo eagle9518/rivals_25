@@ -2,8 +2,8 @@ controller_manager:
   ros__parameters:
     update_rate: 30
 
-    diff_cont:
-      type: diff_drive_controller/DiffDriveController
+    mecanum_controller:
+      type: mecanum_drive_controller/MecanumDriveController
 
     joint_broad:
       type: joint_state_broadcaster/JointStateBroadcaster
@@ -20,25 +20,26 @@ controller_manager:
     intake_velocity_controller:
       type: velocity_controllers/JointGroupVelocityController
 
-    stick_position_controller:
-      type: position_controllers/JointGroupPositionController
+    shooter_indexer_controller:
+      type: velocity_controllers/JointGroupPositionController
 
 
-diff_cont:
+mecanum_controller:
   ros__parameters:
+    reference_timeout: 0.0
 
-    publish_rate: 50.0
+    front_left_wheel_command_joint_name: "FL_wheel_joint"
+    front_right_wheel_command_joint_name: "FR_wheel_joint"
+    rear_right_wheel_command_joint_name: "BR_wheel_joint"
+    rear_left_wheel_command_joint_name: "BL_wheel_joint"
 
-    base_frame_id: base_link
+    kinematics:
+      base_frame_offset: { x: 0.0, y: 0.0, theta: 0.0 }
+      wheels_radius: 0.03537
+      sum_of_robot_center_projection_on_X_Y_axis: 0.236
 
-    left_wheel_names: ['FL_wheel_joint', 'BL_wheel_joint']
-    right_wheel_names: ['FR_wheel_joint', 'BR_wheel_joint']
-    wheel_separation: 0.297
-    wheel_radius: 0.033
-
+    enable_odom_tf: false
     use_stamped_vel: false
-    # TODO I think there's a param that can be set such that it doesn't expect
-    #      encoder values back
 
 shooter_position_controller:
   ros__parameters:
@@ -50,12 +51,12 @@ shooter_velocity_controller:
 
 intake_position_controller:
   ros__parameters:
-    joints: ['yaw_shooter_servo_joint', 'pitch_shooter_servo_joint']
+    joints: ['intake_servo_joint']
 
 intake_velocity_controller:
   ros__parameters:
-    joints: ['left_shooter_wheel_joint', 'right_shooter_wheel_joint']
+    joints: ['intake_pulley_joint']
 
-stick_position_controller:
+shooter_indexer_controller:
   ros__parameters:
-    joints: ['yaw_shooter_servo_joint', 'pitch_shooter_servo_joint']
+    joints: ['shooter_indexer_joint']

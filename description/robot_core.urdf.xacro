@@ -5761,5 +5761,50 @@
     <limit effort="10" velocity="10" lower="-1.74415" upper="1.48471"/>
   </joint>
 
+  <joint name="left_shooter_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="coc_dt"/>
+    <child link="left_shooter_wheel"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="left_shooter_wheel">
+  </link>
+
+  <joint name="right_shooter_wheel_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="coc_dt"/>
+    <child link="right_shooter_wheel"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="right_shooter_wheel">
+  </link>
+
+  <joint name="intake_pulley_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="coc_dt"/>
+    <child link="intake_pulley"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="intake_pulley">
+  </link>
+
+  <joint name="shooter_indexer_joint" type="continuous">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="coc_dt"/>
+    <child link="shooter_indexer"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="shooter_indexer">
+  </link>
+  
+  <joint name="intake_servo_joint" type="revolute">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="coc_dt"/>
+    <child link="intake_servo"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="intake_servo" lower="0" upper="3.14">
+  </link>
+
   </xacro:macro>
 </robot>
