@@ -10,7 +10,6 @@ class Intake(Node):
     def __init__(self):
         super().__init__('intake')
         self.create_subscription(Bool, 'has_projectile', self.has_projectile_cb, 10)
-        self.create_subscription(Bool, 'shooter_ready', self.shooter_ready_cb, 10)
         self.create_subscription(Joy, 'joy', self.joy_cb, 10)
 
         self.pos_pub = self.create_publisher(Float64, 'intake_position_controller/commands', 10)

@@ -1,0 +1,38 @@
+# Calibraion file for your specific camera
+image_width: 2320
+image_height: 1744 
+camera_name: my_camera
+
+# (K) Intrinsic matrix [fx, 0, cx, 0, fy, cy, 0, 0, 1]
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [1561.6249, 0.0, 1103.6397, 
+         0.0, 1559.4402, 886.9318, 
+         0.0, 0.0, 1.0]
+
+distortion_model: plumb_bob
+
+# (D) Distortion parameters [k1, k2, t1, t2, k3]
+# Assuming t1=0.0 and t2=0.0. Update if you have different values.
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [0.0001, -0.0310, 0.0, 0.0, 0.0264]
+
+# (R) Rectification matrix (Identity for monocular)
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1.0, 0.0, 0.0, 
+         0.0, 1.0, 0.0, 
+         0.0, 0.0, 1.0]
+
+# (P) Projection matrix [fx, 0, cx, Tx, 0, fy, cy, Ty, 0, 0, 1, 0]
+# For monocular, Tx=0.0 and Ty=0.0
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [1561.6249, 0.0, 1103.6397, 0.0, 
+         0.0, 1559.4402, 886.9318, 0.0, 
+         0.0, 0.0, 1.0, 0.0]t
